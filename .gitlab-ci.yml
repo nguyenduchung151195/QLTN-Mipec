@@ -1,0 +1,30 @@
+image: docker/compose
+stages:
+    - deploy_build
+    - deploy_up
+
+
+deploy_build:
+  image: node:12
+  stage: deploy_build
+  script:
+    - npm i
+    - npm run build
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+  only:
+    refs:
+      - mipec
+
+deploy_up:
+  stage: deploy_up
+  script:
+    - docker-compose build
+    - docker-compose up -d
+  dependencies:
+      - deploy_build
+  only:
+    refs:
+      - mipec

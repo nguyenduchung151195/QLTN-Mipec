@@ -1,0 +1,75 @@
+import React, { useEffect, useState } from 'react';
+import { Loading } from '../../LifetekUi';
+import { fetchData, serialize } from '../../../helper';
+
+function ExportExcel(props) {
+  const { filter, url, open, getRows, viewConfigs = [], onClose } = props;
+  const [data, setData] = useState([]);
+
+  useEffect(
+    () => {
+      if (url && open) {
+        getData();
+      }
+    },
+    [filter, open, url],
+  );
+
+  const getData = async () => {
+    try {
+      const query = serialize(filter);
+      const apiUrl = `${url}?${query}`;
+      const res = await fetchData(apiUrl);
+      if (res && res.status !== 0) {
+        let result = getRows(res);
+        if (Array.isArray(result)) {
+          setData(result);
+        }
+        onClose();
+      }
+    } catch (error) {
+      console.log(1, error);
+    }
+  };
+  const mapFunction = item => {
+    // item.totalDebt=!isNaN(item.totalDebt) ? Number(item.totalDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.totalDebt;
+    // item.firtDebt=!isNaN(item.firtDebt) ? Number(item.firtDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.firtDebt;
+    // item.secDebt=!isNaN(item.secDebt) ? Number(item.secDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.secDebt;
+    // item.thirdDebt=!isNaN(item.thirdDebt) ? Number(item.thirdDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.thirdDebt;
+    // item.forthDebt=!isNaN(item.forthDebt) ? Number(item.forthDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.forthDebt;
+    // item.fifthDebt=!isNaN(item.fifthDebt) ? Number(item.fifthDebt).toLocaleString("en-IE", { maximumFractionDigits: 3 }): item.fifthDebt;
+    return item;
+  };
+  return (
+    <React.Fragment>
+      {open ? (
+        <Loading />
+      ) : (
+        <table id="excel-table-enter-bill" style={{ display: 'none' }}>
+          <thead>
+            <tr>{viewConfigs && viewConfigs.map(th => <th  style={{ background: '#959a95' }}>{th.title}</th>)}</tr>
+          </thead>
+          <tbody>
+            {data &&
+              data.map(mapFunction).map(item => (
+                <tr>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].code}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].exportDate}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].supplier}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].status}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].productCode}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].productName}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].unit}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].amount}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].importPrice}</td>
+                  <td style={{ border: '1px solid gray' }}>{item.data && item.data[0] && item.data[0].intoMoney}</td>
+                  {/* <td style={{ border: '1px solid gray' }}>{item.createdByName}</td> */}
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      )}
+    </React.Fragment>
+  );
+}
+export default ExportExcel;

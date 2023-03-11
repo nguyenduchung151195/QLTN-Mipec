@@ -1,0 +1,135 @@
+/**
+ *
+ * AddPraise
+ *
+ */
+
+import React, { memo, useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { Info } from '@material-ui/icons';
+import { Grid, Typography } from '../../../../../../../../components/LifetekUi';
+import CustomInputBase from '../../../../../../../../components/Input/CustomInputBase';
+import CustomButton from '../../../../../../../../components/Button/CustomButton';
+import CustomGroupInputField from '../../../../../../../../components/Input/CustomGroupInputField';
+import { viewConfigName2Title, viewConfigCheckForm, viewConfigCheckRequired } from 'utils/common';
+/* eslint-disable react/prefer-stateless-function */
+function AddPraise(props) {
+  const { praise, onSave, onClose, code, hrmEmployeeId } = props;
+  const [localState, setLocalState] = useState({
+    others: {},
+  });
+  const [localCheckRequired, setLocalCheckRequired] = useState({});
+  const [localCheckShowForm, setLocalCheckShowForm] = useState({});
+  const [localMessages, setLocalMessages] = useState({});
+  const [name2Title, setName2Title] = useState({});
+
+  useEffect(() => {
+    const newName2Title = viewConfigName2Title(code);
+    setName2Title(newName2Title);
+    const checkRequired = viewConfigCheckRequired(code, 'required');
+    setLocalCheckRequired(checkRequired);
+    const checkShowForm = viewConfigCheckRequired(code, 'showForm');
+    setLocalCheckShowForm(checkShowForm);
+    return () => {
+      newName2Title;
+      checkRequired;
+      checkShowForm;
+    }
+  }, []);
+
+  useEffect(
+    () => {
+      if (praise && praise.originItem) {
+        setLocalState({ ...praise.originItem });
+      } else {
+        setLocalState({
+          hrmEmployeeId: hrmEmployeeId,
+        });
+      }
+    },
+    [praise],
+  );
+
+  useEffect(() => {
+    const messages = viewConfigCheckForm(code, localState);
+    setLocalMessages(messages);
+    return () => {
+      messages;
+    }
+  }, [localState])
+
+  const handleInputChange = e => {
+    setLocalState({ ...localState, [e.target.name]: e.target.value });
+  };
+
+  const handleOtherDataChange = useCallback(newOther => {
+    setLocalState(state => ({ ...state, others: newOther }));
+  }, [localState]);
+  return (
+    <>
+      <Grid container>
+        <Typography variant="h5" color="primary">
+          <Info />
+          Thông tin khen thưởng con
+        </Typography>
+      </Grid>
+
+      <Grid container spacing={8}>
+        <Grid item xs={4}>
+          <CustomInputBase label={name2Title.name} value={localState.name} name="name" onChange={handleInputChange}
+            checkedShowForm={localCheckShowForm && localCheckShowForm.name}
+            required={localCheckRequired && localCheckRequired.name}
+            error={localMessages && localMessages.name}
+            helperText={localMessages && localMessages.name} />
+        </Grid>
+        <Grid item xs={4}>
+          <CustomInputBase type="date" label={name2Title.bonusDate} value={localState.bonusDate} name="bonusDate" onChange={handleInputChange}
+            checkedShowForm={localCheckShowForm && localCheckShowForm.bonusDate}
+            required={localCheckRequired && localCheckRequired.bonusDate}
+            error={localMessages && localMessages.bonusDate}
+            helperText={localMessages && localMessages.bonusDate} />
+        </Grid>
+        <Grid item xs={4}>
+          <CustomInputBase label={name2Title.agency} value={localState.agency} name="agency" onChange={handleInputChange}
+            checkedShowForm={localCheckShowForm && localCheckShowForm.agency}
+            required={localCheckRequired && localCheckRequired.agency}
+            error={localMessages && localMessages.agency}
+            helperText={localMessages && localMessages.agency} />
+        </Grid>
+        <Grid item xs={4}>
+          <CustomInputBase label={name2Title.note} value={localState.note} name="note" onChange={handleInputChange}
+            checkedShowForm={localCheckShowForm && localCheckShowForm.note}
+            required={localCheckRequired && localCheckRequired.note}
+            error={localMessages && localMessages.note}
+            helperText={localMessages && localMessages.note}
+          />
+        </Grid>
+      </Grid>
+      <CustomGroupInputField code columnPerRow={3} value={localState.others} onChange={handleOtherDataChange} />
+      <Grid container spacing={8} justify="flex-end">
+        <Grid item>
+          <CustomButton
+            color="primary"
+            onClick={e => {
+              onSave(localState);
+            }}
+          >
+            Lưu
+          </CustomButton>
+        </Grid>
+        <Grid item>
+          <CustomButton color="secondary" onClick={e => onClose()}>
+          hủy
+          </CustomButton>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
+
+AddPraise.propTypes = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default memo(AddPraise);

@@ -1,0 +1,21 @@
+/*
+ *
+ * SocialInsurancePage constants
+ *
+ */
+
+export const DEFAULT_ACTION = 'app/SocialInsurancePage/DEFAULT_ACTION';
+
+export const MERGE_DATA = 'app/SocialInsurancePage/MERGE_DATA';
+
+export const CREATE_SOCIALINSURANCE = 'app/SocialInsurancePage/CREATE_SOCIALINSURANCE';
+export const CREATE_SOCIALINSURANCE_SUCCESS = 'app/SocialInsurancePage/CREATE_SOCIALINSURANCE_SUCCESS';
+export const CREATE_SOCIALINSURANCE_FAILURE = 'app/SocialInsurancePage/CREATE_SOCIALINSURANCE_FAILURE';
+
+export const UPDATE_SOCIALINSURANCE = 'app/SocialInsurancePage/UPDATE_SOCIALINSURANCE';
+export const UPDATE_SOCIALINSURANCE_SUCCESS = 'app/SocialInsurancePage/UPDATE_SOCIALINSURANCE_SUCCESS';
+export const UPDATE_SOCIALINSURANCE_FAILURE = 'app/SocialInsurancePage/UPDATE_SOCIALINSURANCE_FAILURE';
+
+export const DELETE_SOCIALINSURANCE = 'app/SocialInsurancePage/DELETE_SOCIALINSURANCE';
+export const DELETE_SOCIALINSURANCE_SUCCESS = 'app/SocialInsurancePage/DELETE_SOCIALINSURANCE_SUCCESS';
+export const DELETE_SOCIALINSURANCE_FAILURE = 'app/SocialInsurancePage/DELETE_SOCIALINSURANCE_FAILURE';
